@@ -100,7 +100,6 @@ function mover () {
     .attr("cy", d3.event.y) ;
     yCirclePosition = d3.event.y;
     xCirclePostion = d3.event.x;
-console.log("yCirclePosition", yCirclePosition, "xCirclePostion", xCirclePostion);
 }
 /*
 Not too sure how drag variable works. d3.beahvior.drag() creates an object???
@@ -117,23 +116,48 @@ I sincerly dislike using libraries without understanding whats under the hood.
 d3.select('body').select('svg').select("circle")
       .call(drag);
 
+
+var highScore = 0;
+var currentScore = 0;
+var collisions = 0;
+
+
+/*
+The function PointsToZero counts the currentScore, modifies the text. 
+checks if a collision happens and if so calls setScoreTozero while incrementing a 
+collision count;
+*/
+
 var pointsToZero = function() {
-  console.log("hi")
+  currentScore++;
+  d3.select('.cScore').text("" + currentScore);
+
   for (var e = 0; e < enemyArray.length; e++) {
     xDistance = enemyArray[e].x - xCirclePostion;
     yDistance = enemyArray[e].y - yCirclePosition;
-    console.log("xDistance", xDistance, "yDistance", yDistance);
     if (xDistance < 0.8 && xDistance > -0.8 || yDistance < 0.8 && yDistance > - 0.8) {
-      console.log("In the rester of points body")
+      setScoreToZero();
+      collisions++;
     }
-  
   }
 };  
 
-var checkScore;    
+/*
+setScoreToZero function sets current score to HScore if greater. It changes the
+text of Collisions, CScore and HScore. 
+*/
+var setScoreToZero = function (){
+  if (currentScore > highScore) {
+    highScore = currentScore;
+    d3.select('.hScore').text("" + highScore);
+  }
+  currentScore = 0; 
+  d3.select('.cScore').text('' + currentScore);
+  d3.select('.coll2').text("" + collisions);
+};    
 /*
 call moveEnemies every second.
 */
-setInterval(pointsToZero,3000);
-setInterval(moveEnemies, 1000);
+setInterval(pointsToZero,100);
+setInterval(moveEnemies, 5000);
 
