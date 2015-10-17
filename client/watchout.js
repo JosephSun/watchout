@@ -1,6 +1,3 @@
-// start slingin' some d3 here.
-
-
 var circle = d3.select("body").append("svg")
     .attr('width', 1400)
     .attr('height', 900)
@@ -11,29 +8,51 @@ var circle = d3.select("body").append("svg")
     .attr("xlink:href", "asteroid.png")
     .attr("width", 100)
     .attr("height", 100)
+    // .attr("position", 'absolute')
     .attr("x", 100)
     .attr("y", 800);
 
-var newEnemy = {
-  x: 1400 * Math.random(),
-  y: 700 * Math.random()
+
+  // ENTER
+  // Create new elements as needed.
+/*  text.enter().append("text")
+      .attr("class", "enter")
+      .attr("x", function(d, i) { return i * 32; })
+      .attr("dy", ".35em");
+*/
+var newEnemy = function (x, y){
+  var enemy = {
+    x: x,
+    y: y    
+  }
+  return enemy
 };
+var enemyArray = [];
+
+for (var i = 0; i < 30; i++) {
+  enemyArray.push(newEnemy(1400 * Math.random(), 700 * Math.random()) );
+}
+var initiateD3Node = function (arr) {
+  circle.selectAll('circle')
+  .data(arr)
+  .enter().append('enemies');
+};
+initiateD3Node(enemyArray);
+debugger;
+/*  var text = svg.selectAll("text")
+      .data(data);*/
+
+
 var moveEnemies = function() {
   d3.selectAll('.enemies')
-  .data([newEnemy])
+  .data(enemyArray)
   .transition().duration(1500) 
   .attr('x', function(d) {
     return d.x * Math.random();
-  });
-
-  d3.selectAll('.enemies')
-  .data([newEnemy])
-  .transition().duration(1500)
+  })
   .attr('y', function(d) {
     return d.y * Math.random();
-  });
-  debugger ;
- // setInterval(moveEnemies,1000);
+  })
 };
 setInterval(moveEnemies, 1000);
 // debugger;
