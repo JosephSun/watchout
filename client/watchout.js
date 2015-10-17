@@ -80,7 +80,7 @@ var moveEnemies = function() {
 /*
 line 37-43 append a circle tag to the main svg element.
 */
-d3.select('.svgTag').append('circle')
+var circ= d3.select('.svgTag').append('circle')
   // .attr('height', 25)
   // .attr('width', 25)
   .attr("class", 'pow')
@@ -92,10 +92,15 @@ d3.select('.svgTag').append('circle')
 The mover function changes the positioning of cx and cy to the event (draging)
 position. (?)
 */
+var xCirclePostion;
+var yCirclePosition;
 function mover () {
   d3.select('circle')
     .attr("cx", d3.event.x )
     .attr("cy", d3.event.y) ;
+    yCirclePosition = d3.event.y;
+    xCirclePostion = d3.event.x;
+console.log("yCirclePosition", yCirclePosition, "xCirclePostion", xCirclePostion);
 }
 /*
 Not too sure how drag variable works. d3.beahvior.drag() creates an object???
@@ -111,8 +116,24 @@ I sincerly dislike using libraries without understanding whats under the hood.
 */
 d3.select('body').select('svg').select("circle")
       .call(drag);
+
+var pointsToZero = function() {
+  console.log("hi")
+  for (var e = 0; e < enemyArray.length; e++) {
+    xDistance = enemyArray[e].x - xCirclePostion;
+    yDistance = enemyArray[e].y - yCirclePosition;
+    console.log("xDistance", xDistance, "yDistance", yDistance);
+    if (xDistance < 0.8 && xDistance > -0.8 || yDistance < 0.8 && yDistance > - 0.8) {
+      console.log("In the rester of points body")
+    }
+  
+  }
+};  
+
+var checkScore;    
 /*
 call moveEnemies every second.
 */
+setInterval(pointsToZero,3000);
 setInterval(moveEnemies, 1000);
 
